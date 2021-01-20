@@ -25,3 +25,16 @@ then
 else
     echo "Aborting..."
 fi
+
+function test {
+    size=$(stat -c%s "$2")
+    file=$(<$2)
+    flashed=$(ethtool -e $1 raw on offset 0 length "$size")
+    #ToDo - Compare $file and $flashed
+    if [[ "$file" == "$flashed" ]]
+    then
+        echo "Verified! EEPROM Read matches $1!"
+    else
+        echo "Error! EEPROM Read did not match $1!"
+    fi
+}
